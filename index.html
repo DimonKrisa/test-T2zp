@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор ЗП Салона Связи</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+
+<style>
+:root{
+  --t2-pink:#e6007e;
+  --t2-pink-soft:#fff0f7;
+  --t2-black:#0b0b0d;
+  --t2-gray:#f2f2f7;
+  --t2-border:#e5e5ea;
+}
+*{box-sizing:border-box}
+html{background:#f2f2f7}
+body{background:#f2f2f7!important;color:#1c1c1e!important;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,system-ui,sans-serif!important;letter-spacing:-.01em}
+/* T2 / iOS visual language */
+.bg-white{background:#fff!important}
+.bg-slate-50,.bg-slate-100{background:#f2f2f7!important}
+.bg-slate-200{background:#e5e5ea!important}
+.text-slate-900,.text-slate-800,.text-slate-700{color:#1c1c1e!important}
+.text-slate-600,.text-slate-500{color:#6e6e73!important}
+.text-slate-400{color:#8e8e93!important}
+.border-slate-100,.border-slate-200{border-color:#e5e5ea!important}
+.bg-brand-600,.bg-brand-700{background:var(--t2-pink)!important}
+.text-brand-600,.text-brand-700,.text-brand-500{color:var(--t2-pink)!important}
+.bg-brand-50{background:var(--t2-pink-soft)!important}
+.border-brand-500{border-color:var(--t2-pink)!important}
+.hover\\:bg-brand-50:hover{background:var(--t2-pink-soft)!important}
+.hover\\:bg-brand-700:hover{background:#c9006e!important}
+body>header{background:rgba(255,255,255,.94)!important;border-color:#e5e5ea!important;backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);box-shadow:0 1px 0 rgba(0,0,0,.05)!important}
+main{padding-top:14px}
+main>.tab-content>div.bg-white,
+#tab-salary>div.bg-white,
+#tab-registries>div.bg-white,
+#tab-useful>div.bg-white{border:0!important;border-radius:18px!important;box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.035)!important}
+button{font-family:inherit;transition:transform .12s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease!important}
+button:active{transform:scale(.97)}
+button.bg-brand-600,button.bg-brand-700{border-radius:14px!important;box-shadow:none!important}
+input,select,textarea{background:#fff!important;border:1px solid #d1d1d6!important;border-radius:13px!important;color:#1c1c1e!important;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.02)!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--t2-pink)!important;box-shadow:0 0 0 3px rgba(230,0,126,.12)!important}
+nav{background:rgba(255,255,255,.94)!important;border-color:#d1d1d6!important;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);box-shadow:0 -1px 0 rgba(0,0,0,.04),0 -8px 24px rgba(0,0,0,.035)!important}
+nav button{color:#8e8e93!important}
+nav button.text-brand-600{color:var(--t2-pink)!important}
+nav i{font-size:18px!important}
+nav span{font-size:10px!important;font-weight:600!important}
+/* make option/action buttons clean and obvious */
+[id^="modal-"] button,[id$="-modal"] button{border-radius:14px!important}
+.fixed.inset-0{background:rgba(0,0,0,.42)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.fixed.inset-0>div{border-radius:24px!important;box-shadow:0 20px 60px rgba(0,0,0,.2)!important}
+/* compact iOS segmented controls */
+.grid.grid-cols-3.gap-1.bg-slate-100,.flex.bg-slate-200{border-radius:13px!important;padding:3px!important}
+.grid.grid-cols-3.gap-1.bg-slate-100 button,.flex.bg-slate-200 button{border-radius:10px!important}
+/* remove heavy borders/shadows from cards */
+.rounded-2xl{border-radius:18px!important}
+.rounded-xl{border-radius:14px!important}
+/* icon tile */
+header .bg-brand-600{background:var(--t2-black)!important;border-radius:12px!important}
+/* status / chips */
+.rounded-full{border-radius:999px!important}
+</style>
+
+<style>
+/* Refined T2 / iOS design */
+:root{--t2-pink:#e5007d;--t2-pink-dark:#c9006e;--t2-black:#09090b;--t2-bg:#f2f2f7;--t2-card:#ffffff;--t2-line:#e5e5ea;}
+.t2-logo{width:40px;height:40px;border-radius:13px;background:var(--t2-black);color:#fff;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:800;letter-spacing:-1.5px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+header{padding-top:env(safe-area-inset-top)!important}
+header .max-w-md{min-height:60px}
+header button{border:0!important;background:#e5e5ea!important;color:#6e6e73!important;border-radius:20px!important;padding:8px 11px!important;font-weight:600!important}
+main{padding-left:14px!important;padding-right:14px!important}
+#tab-sales>div:first-child{background:transparent!important;box-shadow:none!important;padding:2px 0 0!important;border:0!important}
+#tab-sales>div:first-child>div:first-child{padding:0 3px 10px!important}
+#tab-sales>div:first-child h3{font-size:21px!important;letter-spacing:-.6px!important}
+#tab-sales>div:first-child h3:after{content:' ';}
+#categories-container{margin-top:4px!important}
+.sales-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sale-tile{position:relative;min-height:142px;padding:16px 14px!important;border:0!important;border-radius:22px!important;background:#fff!important;box-shadow:0 2px 6px rgba(0,0,0,.045),0 10px 24px rgba(0,0,0,.035)!important;display:flex;flex-direction:column;align-items:flex-start;text-align:left!important;overflow:hidden}
+.sale-tile:active{transform:scale(.965)!important;box-shadow:0 1px 3px rgba(0,0,0,.04)!important}
+.sale-tile-main{grid-column:1/-1;min-height:116px;background:var(--t2-black)!important;color:#fff!important}
+.sale-tile-main .sale-title{color:#fff!important}
+.sale-tile-main .sale-subtitle{color:#b9b9bf!important}
+.sale-icon{width:42px;height:42px;border-radius:14px;background:var(--t2-pink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:auto;box-shadow:0 5px 12px rgba(229,0,125,.18)}
+.sale-tile:not(.sale-tile-main) .sale-icon{background:#fbe6f1;color:var(--t2-pink)}
+.sale-title{display:block;margin-top:13px;font-size:14px;line-height:1.15;font-weight:750;color:#1c1c1e;letter-spacing:-.2px}
+.sale-subtitle{display:block;margin-top:5px;font-size:10px;line-height:1.2;color:#8e8e93}
+.sale-arrow{position:absolute;right:12px;top:12px;width:26px;height:26px;border-radius:50%;background:#f2f2f7;color:#8e8e93;display:flex;align-items:center;justify-content:center;font-size:9px}
+.sale-tile-main .sale-arrow{background:rgba(255,255,255,.12);color:#fff}
+/* More readable secondary buttons */
+button.bg-slate-100{background:#f2f2f7!important;color:#3a3a3c!important;border:0!important}
+button.bg-brand-600{background:var(--t2-pink)!important;color:#fff!important}
+button.bg-brand-600:active{background:var(--t2-pink-dark)!important}
+[id^="modal-"] .bg-white,[id$="-modal"] .bg-white{border:0!important}
+[id^="modal-"] .bg-white button,[id$="-modal"] .bg-white button{min-height:44px}
+[id^="modal-"] .bg-white h3,[id$="-modal"] .bg-white h3{font-size:17px!important;letter-spacing:-.3px}
+/* Selected options */
+.sim-option-btn.bg-brand-50,.sim-option-btn.border-brand-500{background:#fbe6f1!important;color:var(--t2-pink)!important}
+/* Bottom bar like iOS tab bar */
+nav{padding-bottom:env(safe-area-inset-bottom)!important}
+nav .max-w-md{padding:4px 8px 5px!important}
+nav button{height:48px!important;border-radius:14px!important;position:relative}
+nav button.text-brand-600:after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--t2-pink)}
+nav i{font-size:17px!important;margin:0!important}
+nav span{font-size:9px!important;margin-top:4px!important}
+/* Chips and report tabs */
+#sales-report-btn-sim,#sales-report-btn-gsm,#sales-report-btn-acc,#sales-report-btn-subs,#sales-report-btn-shpd,#sales-report-btn-rtk{min-height:34px!important}
+/* Remove generic blue remnants */
+.text-blue-500,.text-blue-600,.text-blue-700{color:var(--t2-pink)!important}
+.bg-blue-50,.bg-blue-100{background:#fbe6f1!important}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="t2-logo">t2</div>
+                <div>
+                    <h1 class="font-bold text-slate-900 leading-tight">Салон Связи</h1>
+                    <p class="text-xs text-slate-500">Учет продаж и ЗП</p>
+                </div>
+            </div>
+            <button onclick="resetAllData()" class="text-slate-400 hover:text-red-500 text-xs px-2 py-1 rounded border border-slate-200 hover:border-red-200 transition" title="Сбросить данные за день">
+                <i class="fa-solid fa-rotate-right mr-1"></i> Сброс дня
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto w-full p-4 pb-24 flex-grow">
+
+        <!-- TAB 1: SALES -->
+        <div id="tab-sales" class="tab-content active space-y-4">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-semibold text-slate-800 text-sm">Категории товаров и услуг</h3>
+                    <span class="text-xs text-slate-400">Нажмите для добавления</span>
+                </div>
+                <div id="categories-container" class="space-y-3">
+                    <!-- Injected via JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Sales Report -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <div class="flex justify-between items-center">
+                    <div><h3 class="font-semibold text-slate-800 text-sm"><i class="fa-solid fa-chart-column mr-1 text-brand-600"></i> Отчёт по всем продажам</h3><p class="text-[10px] text-slate-500 mt-0.5">Отдельный отчёт по каждому направлению</p></div>
+                    <span id="sales-report-total" class="text-xs bg-brand-50 text-brand-600 font-semibold px-2 py-0.5 rounded-full">0</span>
+                </div>
+                <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl">
+                    <button onclick="switchSalesReportTab('sim')" id="sales-report-btn-sim" class="py-2 text-[10px] font-semibold rounded-lg bg-white text-slate-800 shadow-sm">СИМ</button>
+                    <button onclick="switchSalesReportTab('gsm')" id="sales-report-btn-gsm" class="py-2 text-[10px] font-semibold rounded-lg text-slate-600">GSM</button>
+                    <button onclick="switchSalesReportTab('acc')" id="sales-report-btn-acc" class="py-2 text-[10px] font-semibold rounded-lg text-slate-600">Аксессуары</button>
+                    <button onclick="switchSalesReportTab('subs')" id="sales-report-btn-subs" class="py-2 text-[10px] font-semibold rounded-lg text-slate-600">Подписки</button>
+                    <button onclick="switchSalesReportTab('shpd')" id="sales-report-btn-shpd" class="py-2 text-[10px] font-semibold rounded-lg text-slate-600">ШПД</button>
+                    <button onclick="switchSalesReportTab('rtk')" id="sales-report-btn-rtk" class="py-2 text-[10px] font-semibold rounded-lg text-slate-600">РТК</button>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="block text-[10px] text-slate-500 mb-1">Дата от</label><input id="report-date-from" type="date" onchange="renderSalesReport()" class="w-full border border-slate-200 rounded-lg p-2 text-xs"></div>
+                    <div><label class="block text-[10px] text-slate-500 mb-1">Дата до</label><input id="report-date-to" type="date" onchange="renderSalesReport()" class="w-full border border-slate-200 rounded-lg p-2 text-xs"></div>
+                    <div id="report-promo-filter-wrap" class="col-span-2"><label class="block text-[10px] text-slate-500 mb-1">Акция</label><select id="report-promo-filter" onchange="renderSalesReport()" class="w-full border border-slate-200 rounded-lg p-2 text-xs"><option value="">Все акции</option><option value="Нет">Без акции</option><option value="Семейный">Семейный</option><option value="Золото">Золото</option><option value="Абонемент">Абонемент</option></select></div>
+                </div>
+                <div id="sales-report-content" class="space-y-2 max-h-72 overflow-y-auto"></div>
+            </div>
+        </div>
+
+        <!-- TAB 2: SALARY & PLANS -->
+        <div id="tab-salary" class="tab-content space-y-4">
+
+            <!-- SIM Daily Plan Table -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-slate-800 text-sm"><i class="fa-solid fa-table mr-1 text-brand-600"></i> План СИМ по дням</h3>
+                    <button onclick="openPlanModal()" class="text-xs text-brand-600 font-medium hover:underline">
+                        <i class="fa-solid fa-pen mr-1"></i> Планы
+                    </button>
+                </div>
+                <div class="overflow-x-auto pb-2 -mx-2 px-2">
+                    <table class="w-full text-left border-collapse text-[11px]" id="excel-matrix-table">
+                        <!-- Generated via JS -->
+                    </table>
+                </div>
+            </div>
+
+            <!-- SALARY SETTINGS + TOTAL -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-slate-800 text-sm">Расчёт заработной платы</h3>
+                    <span class="text-[10px] text-slate-400">Только продажи</span>
+                </div>
+                <div class="grid grid-cols-1 gap-2">
+                    <div class="bg-brand-50 rounded-xl p-3"><div class="text-[10px] text-brand-600">Зарплата по факту</div><div id="calc-total-pay" class="font-bold text-brand-700 text-lg">0 ₽</div></div>
+                </div>
+                <div class="bg-emerald-50 rounded-xl p-3 flex justify-between items-center"><span class="text-xs text-emerald-700">Зарплата по прогнозу</span><span id="calc-forecast-pay" class="font-bold text-emerald-700">0 ₽</span></div>
+            </div>
+
+            <!-- ALL DIRECTIONS BONUS CALCULATION -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-semibold text-slate-800 text-sm">Бонусы по всем направлениям</h3>
+                        <p class="text-[10px] text-slate-500 mt-0.5">СИМ, GSM, аксессуары, подписки, ШПД и РТК — факт и прогноз</p>
+                    </div>
+                    <button onclick="openPlanModal()" class="text-xs text-brand-600 font-medium hover:underline">
+                        <i class="fa-solid fa-pen mr-1"></i> Планы
+                    </button>
+                </div>
+                <div id="other-bonus-cards" class="space-y-2"></div>
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <div class="bg-brand-50 p-3 rounded-xl">
+                        <div class="text-[10px] text-brand-600">Итого бонус по факту</div>
+                        <div id="calc-total-bonus" class="font-bold text-brand-700 text-lg">0 ₽</div>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-xl">
+                        <div class="text-[10px] text-emerald-600">Итого бонус по прогнозу</div>
+                        <div id="calc-total-forecast-bonus" class="font-bold text-emerald-700 text-lg">0 ₽</div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-[10px] text-slate-500 leading-relaxed">
+                    <b class="text-slate-700">Правила:</b> для СИМ учитываются реальные ставки, MNP и AppSeller по правилам выше; Золото — 500 ₽, Абонемент — 20% стоимости без понижающих коэффициентов. Остальные направления рассчитываются по своим ставкам и выполнению плана.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 3: REGISTRIES -->
+        <div id="tab-registries" class="tab-content space-y-4">
+            <div class="flex bg-slate-200 p-1 rounded-xl">
+                <button onclick="switchRegistryTab('mnp')" id="subtab-mnp-btn" class="flex-1 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-800 shadow-sm transition">МНП (Переносы)</button>
+                <button onclick="switchRegistryTab('shpd')" id="subtab-shpd-btn" class="flex-1 py-1.5 text-xs font-semibold rounded-lg text-slate-600 transition">ШПД (Интернет)</button>
+            </div>
+
+            <div id="subtab-mnp-content" class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-slate-800 text-sm">Реестр МНП заявок</h3>
+                    <button onclick="openMnpModal()" class="bg-brand-600 text-white text-xs px-3 py-1.5 rounded-xl font-medium shadow-sm hover:bg-brand-700 transition">
+                        <i class="fa-solid fa-plus mr-1"></i> Добавить
+                    </button>
+                </div>
+                <div id="mnp-list" class="space-y-2"></div>
+            </div>
+
+            <div id="subtab-shpd-content" class="space-y-3 hidden">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-slate-800 text-sm">Реестр ШПД подключений</h3>
+                    <button onclick="openShpdModal()" class="bg-brand-600 text-white text-xs px-3 py-1.5 rounded-xl font-medium shadow-sm hover:bg-brand-700 transition">
+                        <i class="fa-solid fa-plus mr-1"></i> Добавить
+                    </button>
+                </div>
+                <div id="shpd-list" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- TAB 4: USEFUL / NOTES -->
+        <div id="tab-useful" class="tab-content space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="font-bold text-slate-900">Полезное</h2>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Сохраняйте важную информацию, шпаргалки и фотографии</p>
+                </div>
+                <button onclick="openNoteEditor()" class="bg-brand-600 text-white px-3 py-2 rounded-xl text-xs font-semibold shadow-sm">
+                    <i class="fa-solid fa-plus mr-1"></i> Новая заметка
+                </button>
+            </div>
+            <div id="notes-list" class="space-y-3"></div>
+        </div>
+
+        <!-- NOTE EDITOR -->
+        <div id="note-editor-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 id="note-editor-title" class="font-bold text-slate-900 text-sm">Новая заметка</h3>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Текст и фотографии сохраняются в приложении</p>
+                    </div>
+                    <button onclick="closeNoteEditor()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <input type="hidden" id="note-edit-id">
+                <div>
+                    <label class="block text-xs text-slate-500 mb-1">Название</label>
+                    <input id="note-title-input" type="text" maxlength="100" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="Например: Коды акций">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-500 mb-1">Текст заметки</label>
+                    <textarea id="note-text-input" rows="7" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-brand-500 placeholder-slate-400" placeholder="Введите нужную информацию..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-500 mb-1">Фото</label>
+                    <label class="flex items-center justify-center gap-2 border border-dashed border-slate-300 rounded-xl p-3 text-xs text-slate-600 cursor-pointer hover:bg-slate-50">
+                        <i class="fa-solid fa-camera text-brand-600"></i> Добавить фотографии
+                        <input id="note-images-input" type="file" accept="image/*" multiple class="hidden" onchange="handleNoteImages(this.files)">
+                    </label>
+                    <div id="note-images-preview" class="grid grid-cols-3 gap-2 mt-2"></div>
+                </div>
+                <div class="flex space-x-2 pt-1">
+                    <button onclick="closeNoteEditor()" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">Отмена</button>
+                    <button onclick="saveNote()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs"><i class="fa-solid fa-floppy-disk mr-1"></i> Сохранить</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <nav class="bg-white border-t border-slate-200 fixed bottom-0 left-0 right-0 z-30 shadow-lg">
+        <div class="max-w-md mx-auto flex justify-around py-2">
+            <button onclick="switchTab('sales')" id="nav-sales" class="flex flex-col items-center justify-center w-1/4 py-1 text-brand-600 transition">
+                <i class="fa-solid fa-bag-shopping text-lg"></i>
+                <span class="text-[10px] font-medium mt-1">Продажи</span>
+            </button>
+            <button onclick="switchTab('salary')" id="nav-salary" class="flex flex-col items-center justify-center w-1/4 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-wallet text-lg"></i>
+                <span class="text-[10px] font-medium mt-1">Зарплата</span>
+            </button>
+            <button onclick="switchTab('registries')" id="nav-registries" class="flex flex-col items-center justify-center w-1/4 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-list-check text-lg"></i>
+                <span class="text-[10px] font-medium mt-1">Реестры</span>
+            </button>
+            <button onclick="switchTab('useful')" id="nav-useful" class="flex flex-col items-center justify-center w-1/4 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-bookmark text-lg"></i>
+                <span class="text-[10px] font-medium mt-1">Полезное</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- SIM STEP 1: Type Selection (MNP or Sale) -->
+    <div id="modal-sim-step1" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">СИМ-карта (Шаг 1 из 3)</h3>
+                <button onclick="closeModal('modal-sim-step1')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div>
+                <label class="block text-slate-500 mb-2 text-xs font-medium">Тип оформления</label>
+                <div class="flex flex-col space-y-2">
+                    <button onclick="selectSimType('Продажа')" class="w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition text-center">Обычная продажа</button>
+                    <button onclick="selectSimType('MNP')" class="w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition text-center">МНП (Перенос номера)</button>
+                </div>
+            </div>
+            <div class="pt-2">
+                <button onclick="closeModal('modal-sim-step1')" class="w-full bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs hover:bg-slate-200 transition">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MNP SIM Specific Form Modal -->
+    <div id="modal-sim-mnp-form" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">Данные МНП (Перенос)</h3>
+                <button onclick="closeModal('modal-sim-mnp-form')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-500 mb-1">ФИО абонента</label>
+                    <input type="text" id="sim-mnp-client" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="Иванов И.И.">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Временный номер</label>
+                    <input type="tel" id="sim-mnp-temp-phone" oninput="formatPhoneInput(this)" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="+7 ">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Переносимый номер</label>
+                    <input type="tel" id="sim-mnp-port-phone" oninput="formatPhoneInput(this)" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="+7 ">
+                </div>
+                <div>
+
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="backToSimStep1()" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">← Назад</button>
+                <button onclick="submitSimMnpForm()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs">Далее</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- SIM STEP 2: Passport -->
+    <div id="modal-sim-passport" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">СИМ-карта (Шаг 2 из 3)</h3>
+                <button onclick="closeModal('modal-sim-passport')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div>
+                <label class="block text-slate-500 mb-2 text-xs font-medium">Тип паспорта</label>
+                <div class="flex flex-col space-y-2">
+                    <button onclick="selectSimPassport('Российский')" class="w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition text-center">Российский</button>
+                    <button onclick="selectSimPassport('Иностранный')" class="w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition text-center">Иностранный</button>
+                </div>
+            </div>
+            <div class="pt-2">
+                <button onclick="backSimStep1()" class="w-full bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs hover:bg-slate-200 transition">← Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIM STEP 3: Tariff Matrix Selection -->
+    <div id="modal-sim-step2" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-4 shadow-xl max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">Выберите тариф</h3>
+                <button onclick="closeModal('modal-sim-step2')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="tariff-buttons-container" class="space-y-2 overflow-y-auto pr-1 flex-grow">
+                <!-- Populated dynamically from matrix -->
+            </div>
+            <div class="pt-2">
+                <button onclick="backSimStep2()" class="w-full bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs hover:bg-slate-200 transition">← Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIM STEP 4: Promo -->
+    <div id="modal-sim-step3" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">СИМ-карта (Финал)</h3>
+                <button onclick="closeModal('modal-sim-step3')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-500 mb-1">Способ регистрации</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" onclick="setSimField('registration','AppSeller',this)" class="sim-option-btn p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 font-semibold">AppSeller</button>
+                        <button type="button" onclick="setSimField('registration','WebSeller',this)" class="sim-option-btn p-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold">WebSeller</button>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="block text-slate-500 mb-2 text-xs font-medium">Акция / Опция</label>
+                <div id="promo-buttons-container" class="flex flex-col space-y-2"></div>
+            </div>
+            <div class="pt-2">
+                <button onclick="backSimStep3()" class="w-full bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs hover:bg-slate-200 transition">← Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIM SUBSCRIPTION TERM -->
+    <div id="modal-sim-subscription" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">Абонемент</h3>
+                <button onclick="closeModal('modal-sim-subscription')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p id="subscription-tariff-hint" class="text-xs text-slate-500"></p>
+            <div id="subscription-buttons-container" class="space-y-2"></div>
+            <div class="pt-2">
+                <button onclick="backSimSubscription()" class="w-full bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">← Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GSM Modal (Only Amount) -->
+    <div id="modal-gsm" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">Продажа GSM (Телефон / Гаджет)</h3>
+                <button onclick="closeModal('modal-gsm')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-500 mb-1">Сумма продажи (₽)</label>
+                    <input type="number" id="gsm-amount" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="15000">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeModal('modal-gsm')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">Отмена</button>
+                <button onclick="submitGsmSale()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ShPD Sale Modal -->
+    <div id="modal-shpd" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">Подключение ШПД</h3>
+                <button onclick="closeModal('modal-shpd')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-500 mb-1">Тип подключения</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" id="shpd-type-internet" onclick="setShpdType('Интернет', this)" class="p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 font-semibold">Интернет</button>
+                        <button type="button" id="shpd-type-tv" onclick="setShpdType('Интернет + ТВ', this)" class="p-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold">Интернет + ТВ</button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Номер заявки (13 цифр)</label>
+                    <input type="text" id="shpd-sale-request" inputmode="numeric" maxlength="13" oninput="this.value=this.value.replace(/\D/g,'').slice(0,13)" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="1234567890123">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Адрес установки</label>
+                    <input type="text" id="shpd-sale-address" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="ул. Ленина, д. 5, кв. 12">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">ФИО абонента</label>
+                    <input type="text" id="shpd-sale-client" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="Иванов Иван Иванович">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Номер телефона</label>
+                    <input type="tel" id="shpd-sale-phone" oninput="formatPhoneInput(this)" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="+7 ">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Дата установки</label>
+                    <input type="date" id="shpd-sale-date" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeModal('modal-shpd')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">Отмена</button>
+                <button onclick="submitShpdSale()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RTK Modal -->
+    <div id="modal-rtk" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">Услуга РТК</h3>
+                <button onclick="closeModal('modal-rtk')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div>
+                <label class="block text-slate-500 mb-2 text-xs font-medium">Выберите товар / услугу</label>
+                <div class="flex flex-col space-y-2">
+                    <button onclick="submitRtkItem('Камера', 4790)" class="w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition flex justify-between items-center">
+                        <span>Камера</span>
+                        <span class="text-brand-600 font-bold">4 790 ₽</span>
+                    </button>
+                    <button onclick="submitRtkItem('Приставка Винк', 6990)" class="w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition flex justify-between items-center">
+                        <span>Приставка Винк</span>
+                        <span class="text-brand-600 font-bold">6 990 ₽</span>
+                    </button>
+                    <button onclick="submitRtkItem('Приставка Сбербокс', 5490)" class="w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition flex justify-between items-center">
+                        <span>Приставка Сбербокс</span>
+                        <span class="text-brand-600 font-bold">5 490 ₽</span>
+                    </button>
+                </div>
+            </div>
+            <div class="pt-2">
+                <button onclick="closeModal('modal-rtk')" class="w-full bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs hover:bg-slate-200 transition">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscriptions Modal -->
+    <div id="modal-subs" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm">Подписки</h3>
+                <button onclick="closeModal('modal-subs')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-500 mb-1">Сумма (₽)</label>
+                    <input type="number" id="subs-amount" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="299">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeModal('modal-subs')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">Отмена</button>
+                <button onclick="submitSubsSale()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MNP Modal -->
+    <div id="mnp-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900">Новая заявка МНП</h3>
+                <button onclick="closeMnpModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-500 mb-1">ФИО клиента</label>
+                    <input type="text" id="mnp-client" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="Иванов И.И.">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Временный номер</label>
+                    <input type="tel" id="mnp-temp-phone" oninput="formatPhoneInput(this)" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="+7 ">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Переносимый номер</label>
+                    <input type="tel" id="mnp-port-phone" oninput="formatPhoneInput(this)" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="+7 ">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Дата подачи</label>
+                    <input type="date" id="mnp-date" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeMnpModal()" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">Отмена</button>
+                <button onclick="addMnpItem()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ShPD Registry Modal -->
+    <div id="shpd-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900">Подключение ШПД</h3>
+                <button onclick="closeShpdModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-500 mb-1">Тип подключения</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" id="registry-shpd-type-internet" onclick="setRegistryShpdType('Интернет', this)" class="p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 font-semibold">Интернет</button>
+                        <button type="button" id="registry-shpd-type-tv" onclick="setRegistryShpdType('Интернет + ТВ', this)" class="p-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold">Интернет + ТВ</button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Адрес установки</label>
+                    <input type="text" id="shpd-address" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="ул. Ленина, д. 5, кв. 12">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">ФИО абонента</label>
+                    <input type="text" id="shpd-client" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="Иванов Иван Иванович">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Номер телефона</label>
+                    <input type="tel" id="shpd-phone" oninput="formatPhoneInput(this)" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="+7 ">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Статус заявки</label>
+                    <select id="shpd-status" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500">
+                        <option value="В работе">В работе</option>
+                        <option value="Установлен">Установлен</option>
+                        <option value="Отказано">Отказано</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Дата установки</label>
+                    <input type="date" id="shpd-date" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeShpdModal()" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">Отмена</button>
+                <button onclick="addShpdItem()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan Settings Modal -->
+    <div id="plan-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900">Настройка планов</h3>
+                <button onclick="closePlanModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs max-h-[65vh] overflow-y-auto pr-1">
+                <div>
+                    <label class="block text-slate-500 mb-1">СИМ — план (шт)</label>
+                    <input type="number" id="input-plan-sim" min="0" step="1" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="100">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">MNP — план (шт, 0 = не задан)</label>
+                    <input type="number" id="input-plan-mnp" min="0" step="1" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="0">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">GSM — план (₽)</label>
+                    <input type="number" id="input-plan-gsm" min="0" step="1" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="200000">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Аксессуары — план (₽)</label>
+                    <input type="number" id="input-plan-acc" min="0" step="1" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="0">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">Подписки — план (₽)</label>
+                    <input type="number" id="input-plan-subs" min="0" step="1" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="15000">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">ШПД — план (шт)</label>
+                    <input type="number" id="input-plan-shpd" min="0" step="1" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="30">
+                </div>
+                <div>
+                    <label class="block text-slate-500 mb-1">РТК — план (₽)</label>
+                    <input type="number" id="input-plan-rtk" min="0" step="1" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" value="50000">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closePlanModal()" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">Отмена</button>
+                <button onclick="savePlanSettings()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal to edit specific day cell value -->
+    <div id="modal-edit-cell" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center">
+                <h3 id="edit-cell-title" class="font-bold text-slate-900 text-sm">Ввод за день</h3>
+                <button onclick="closeModal('modal-edit-cell')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <p id="edit-cell-subtitle" class="text-slate-500"></p>
+                <div>
+                    <label class="block text-slate-500 mb-1" id="edit-cell-label">Значение</label>
+                    <input type="number" id="input-cell-val" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-brand-500" placeholder="0">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeModal('modal-edit-cell')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-xs">Отмена</button>
+                <button onclick="saveCellData()" class="flex-1 bg-brand-600 text-white py-2.5 rounded-xl font-medium text-xs">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const simTariffMatrix = [
+            "Black",
+            "Мой онлайн+",
+            "Мой онлайн",
+            "Мой разговор",
+            "Везде онлайн",
+            "Партнер М"
+        ];
+
+        const simSubscriptionPrices = {
+            "Мой онлайн": { 3: 1650, 6: 2500, 12: 4150 },
+            "Везде онлайн": { 3: 1650, 6: 2500, 12: 4150 },
+            "Мой онлайн+": { 3: 1800, 6: 2900, 12: 4850 }
+        };
+
+        const simGoldTariffs = new Set(["Мой онлайн+", "Везде онлайн", "Black"]);
+        const simFamilyTariffs = new Set(["Мой онлайн+", "Мой онлайн", "Black"]);
+
+        let appData = {
+            plans: { sim: 100, mnp: 0, gsm: 200000, acc: 0, shpd: 30, rtk: 50000, subs: 15000 },
+            salarySettings: { basePay: 25000, daysWorked: 15, daysTotal: 30 },
+            simSalesLog: [],
+            mnpList: [],
+            shpdList: [],
+            dailyMatrix: { sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} },
+            notes: "",
+            notesList: []
+        };
+
+        let tempSim = {
+            type: 'Продажа', client: '-', tempPhone: '-', portPhone: '-',
+            passport: 'Российский', tariff: '', promo: 'Нет', subscriptionMonths: null, subscriptionPrice: null,
+            registration: 'AppSeller'
+        };
+        let activeEditCell = { key: '', day: 1 };
+
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('salon_app_data_v9');
+                if (saved) {
+                    appData = JSON.parse(saved);
+                }
+                appData.salesLog = appData.salesLog || { gsm: [], acc: [], subs: [], rtk: [] };
+                ['gsm','acc','subs','rtk'].forEach(k => { appData.salesLog[k] = appData.salesLog[k] || []; });
+                appData.dailyMatrix = appData.dailyMatrix || {};
+                ['sim','gsm','acc','shpd','rtk','subs'].forEach(k => { appData.dailyMatrix[k] = appData.dailyMatrix[k] || {}; });
+                appData.plans = Object.assign({ sim: 100, mnp: 0, gsm: 200000, acc: 0, shpd: 30, rtk: 50000, subs: 15000 }, appData.plans || {});
+                appData.salarySettings = Object.assign({ basePay: 25000, daysWorked: 15, daysTotal: 30 }, appData.salarySettings || {});
+                appData.simSalesLog = Array.isArray(appData.simSalesLog) ? appData.simSalesLog : [];
+                appData.mnpList = Array.isArray(appData.mnpList) ? appData.mnpList : [];
+                appData.shpdList = Array.isArray(appData.shpdList) ? appData.shpdList : [];
+                appData.dailyMatrix = Object.assign({ sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} }, appData.dailyMatrix || {});
+                Object.keys({ sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} }).forEach(k => {
+                    appData.dailyMatrix[k] = appData.dailyMatrix[k] && typeof appData.dailyMatrix[k] === 'object' ? appData.dailyMatrix[k] : {};
+                });
+                appData.notes = appData.notes || '';
+                appData.notesList = Array.isArray(appData.notesList) ? appData.notesList : [];
+                if (appData.notes && appData.notesList.length === 0) {
+                    appData.notesList.push({ id: Date.now(), title: 'Старая заметка', text: appData.notes, images: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+                }
+            } catch (e) {
+                console.error("Error loading data", e);
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem('salon_app_data_v9', JSON.stringify(appData));
+            } catch (e) {
+                console.error("Error saving data", e);
+            }
+        }
+
+        function switchTab(tabId) {
+            ['sales', 'salary', 'registries', 'useful'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.remove('active');
+                document.getElementById(`nav-${t}`).classList.remove('text-brand-600');
+                document.getElementById(`nav-${t}`).classList.add('text-slate-400');
+            });
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(`nav-${tabId}`).classList.remove('text-slate-400');
+            document.getElementById(`nav-${tabId}`).classList.add('text-brand-600');
+            updateUI();
+        }
+
+        function switchRegistryTab(sub) {
+            if (sub === 'mnp') {
+                document.getElementById('subtab-mnp-btn').className = "flex-1 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-800 shadow-sm transition";
+                document.getElementById('subtab-shpd-btn').className = "flex-1 py-1.5 text-xs font-semibold rounded-lg text-slate-600 transition";
+                document.getElementById('subtab-mnp-content').classList.remove('hidden');
+                document.getElementById('subtab-shpd-content').classList.add('hidden');
+            } else {
+                document.getElementById('subtab-shpd-btn').className = "flex-1 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-800 shadow-sm transition";
+                document.getElementById('subtab-mnp-btn').className = "flex-1 py-1.5 text-xs font-semibold rounded-lg text-slate-600 transition";
+                document.getElementById('subtab-shpd-content').classList.remove('hidden');
+                document.getElementById('subtab-mnp-content').classList.add('hidden');
+            }
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function formatPhoneInput(input) {
+            let val = input.value.replace(/\D/g, '');
+            if (val.startsWith('7') || val.startsWith('8')) val = val.substring(1);
+            if (val.length > 10) val = val.substring(0, 10);
+            let formatted = '+7 ';
+            if (val.length > 0) formatted += '(' + val.substring(0, 3);
+            if (val.length >= 4) formatted += ') ' + val.substring(3, 6);
+            if (val.length >= 7) formatted += '-' + val.substring(6, 8);
+            if (val.length >= 9) formatted += '-' + val.substring(8, 10);
+            input.value = formatted;
+        }
+
+        function localDateString(date = new Date()) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function addDaysToDate(dateString, days) {
+            const parts = dateString.split('-').map(Number);
+            const d = new Date(parts[0], parts[1] - 1, parts[2]);
+            d.setDate(d.getDate() + days);
+            return localDateString(d);
+        }
+
+        let activeShpdType = 'Интернет';
+        let activeRegistryShpdType = 'Интернет';
+        function setShpdType(type, btn) {
+            activeShpdType = type;
+            document.querySelectorAll('#modal-shpd [id^="shpd-type-"]').forEach(b => b.className = 'p-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold');
+            btn.className = 'p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 font-semibold';
+        }
+        function setRegistryShpdType(type, btn) {
+            activeRegistryShpdType = type;
+            document.querySelectorAll('#shpd-modal [id^="registry-shpd-type-"]').forEach(b => b.className = 'p-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold');
+            btn.className = 'p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 font-semibold';
+        }
+
+        // SIM Modal Chain
+        function startSimFlow() { openModal('modal-sim-step1'); }
+        function selectSimType(type) {
+            tempSim = { type, client: '-', tempPhone: '-', portPhone: '-', applicationNumber: '', passport: 'Российский', tariff: '', promo: 'Нет', subscriptionMonths: null, subscriptionPrice: null, registration: 'AppSeller' };
+            closeModal('modal-sim-step1');
+            if (type === 'MNP') {
+                document.getElementById('sim-mnp-client').value = '';
+                document.getElementById('sim-mnp-temp-phone').value = '+7 ';
+                document.getElementById('sim-mnp-port-phone').value = '+7 ';
+                openModal('modal-sim-mnp-form');
+            } else {
+                tempSim.client = 'Обычный абонент';
+                tempSim.tempPhone = '-';
+                tempSim.portPhone = '-';
+                openModal('modal-sim-passport');
+            }
+        }
+
+        function backToSimStep1() { closeModal('modal-sim-mnp-form'); openModal('modal-sim-step1'); }
+        function submitSimMnpForm() {
+            tempSim.client = document.getElementById('sim-mnp-client').value.trim() || 'Клиент МНП';
+            tempSim.tempPhone = document.getElementById('sim-mnp-temp-phone').value;
+            tempSim.portPhone = document.getElementById('sim-mnp-port-phone').value;
+            tempSim.applicationNumber = '';
+            closeModal('modal-sim-mnp-form');
+            openModal('modal-sim-passport');
+        }
+
+        function selectSimPassport(pass) {
+            tempSim.passport = pass;
+            closeModal('modal-sim-passport');
+            renderTariffButtons();
+            openModal('modal-sim-step2');
+        }
+
+        function backSimStep1() {
+            closeModal('modal-sim-passport');
+            if (tempSim.type === 'MNP') openModal('modal-sim-mnp-form');
+            else openModal('modal-sim-step1');
+        }
+
+        function renderTariffButtons() {
+            const container = document.getElementById('tariff-buttons-container');
+            container.innerHTML = '';
+            simTariffMatrix.forEach(tariffName => {
+                const btn = document.createElement('button');
+                btn.className = "w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition text-center";
+                btn.textContent = tariffName;
+                btn.onclick = () => selectSimTariff(tariffName);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectSimTariff(tariffName) {
+            tempSim.tariff = tariffName;
+            tempSim.promo = 'Нет';
+            tempSim.subscriptionMonths = null;
+            tempSim.subscriptionPrice = null;
+            closeModal('modal-sim-step2');
+            renderPromoButtons();
+            openModal('modal-sim-step3');
+        }
+
+        function backSimStep2() { closeModal('modal-sim-step2'); openModal('modal-sim-passport'); }
+        function backSimStep3() { closeModal('modal-sim-step3'); openModal('modal-sim-step2'); }
+
+        function setSimField(field, value, btn) {
+            tempSim[field] = value;
+            if (btn) {
+                const group = btn.parentElement.querySelectorAll('.sim-option-btn');
+                group.forEach(b => b.className = "sim-option-btn p-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold");
+                btn.className = "sim-option-btn p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 font-semibold";
+            }
+        }
+
+        function renderPromoButtons() {
+            const container = document.getElementById('promo-buttons-container');
+            container.innerHTML = '';
+
+            const addPromoButton = (label, action) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full p-3 text-xs font-semibold rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition text-center";
+                btn.textContent = label;
+                btn.onclick = action;
+                container.appendChild(btn);
+            };
+
+            addPromoButton('Обычная (Без спец. акции)', () => submitSimFinal('Нет'));
+
+            if (Object.prototype.hasOwnProperty.call(simSubscriptionPrices, tempSim.tariff)) {
+                addPromoButton('Абонемент (Акция)', openSubscriptionSelection);
+            }
+
+            if (simGoldTariffs.has(tempSim.tariff)) {
+                addPromoButton('Золото (фиксированная выплата 500 ₽)', () => submitSimFinal('Золото'));
+            }
+
+            if (simFamilyTariffs.has(tempSim.tariff)) {
+                addPromoButton('Семейный', () => submitSimFinal('Семейный'));
+            }
+        }
+
+        function openSubscriptionSelection() {
+            const prices = simSubscriptionPrices[tempSim.tariff];
+            if (!prices) return;
+            document.getElementById('subscription-tariff-hint').textContent = `Тариф: ${tempSim.tariff}. Выберите срок абонемента:`;
+            const container = document.getElementById('subscription-buttons-container');
+            container.innerHTML = '';
+            [3, 6, 12].forEach(months => {
+                const btn = document.createElement('button');
+                btn.className = "w-full p-3 rounded-xl border border-slate-200 hover:border-brand-500 hover:bg-brand-50 text-slate-700 transition flex justify-between items-center text-xs font-semibold";
+                btn.innerHTML = `<span>${months} месяцев</span><span class="text-brand-600 font-bold">${prices[months].toLocaleString('ru-RU')} ₽</span>`;
+                btn.onclick = () => submitSubscription(months, prices[months]);
+                container.appendChild(btn);
+            });
+            closeModal('modal-sim-step3');
+            openModal('modal-sim-subscription');
+        }
+
+        function backSimSubscription() {
+            closeModal('modal-sim-subscription');
+            renderPromoButtons();
+            openModal('modal-sim-step3');
+        }
+
+        function submitSubscription(months, price) {
+            tempSim.subscriptionMonths = months;
+            tempSim.subscriptionPrice = price;
+            submitSimFinal('Абонемент');
+        }
+
+        function submitSimFinal(promo) {
+            tempSim.promo = promo;
+            if (promo !== 'Абонемент') {
+                tempSim.subscriptionMonths = null;
+                tempSim.subscriptionPrice = null;
+            }
+            closeModal('modal-sim-step3');
+            closeModal('modal-sim-subscription');
+
+            const sale = {
+                id: Date.now(),
+                type: tempSim.type,
+                client: tempSim.client,
+                tempPhone: tempSim.tempPhone,
+                portPhone: tempSim.portPhone,
+                passport: tempSim.passport,
+                tariff: tempSim.tariff,
+                promo: tempSim.promo,
+                subscriptionMonths: tempSim.subscriptionMonths,
+                subscriptionPrice: tempSim.subscriptionPrice,
+                registration: tempSim.registration || 'AppSeller'
+            };
+            const todayDate = new Date().getDate();
+            sale.planDay = todayDate;
+            appData.simSalesLog.unshift(sale);
+
+            // При продаже МНП автоматически создаём запись в реестре.
+            if (tempSim.type === 'MNP') {
+                const applicationDate = localDateString();
+                appData.mnpList.unshift({
+                    id: Date.now() + 1,
+                    client: tempSim.client || 'Клиент МНП',
+                    tempPhone: tempSim.tempPhone || '—',
+                    phone: tempSim.portPhone || '—',
+                    applicationDate,
+                    transferDate: addDaysToDate(applicationDate, 8),
+                    status: 'В работе'
+                });
+            }
+
+            const planWeight = getSimPlanWeight(sale);
+            appData.dailyMatrix.sim[todayDate] = (appData.dailyMatrix.sim[todayDate] || 0) + planWeight;
+
+            saveData();
+            updateUI();
+        }
+
+        function deleteSimSale(id) {
+            const index = appData.simSalesLog.findIndex(s => s.id === id);
+            if (index !== -1) {
+                const item = appData.simSalesLog[index];
+                appData.simSalesLog.splice(index, 1);
+                const planDay = Number(item.planDay || new Date().getDate());
+                if (appData.dailyMatrix.sim[planDay] > 0 && getSimPlanWeight(item) > 0) {
+                    appData.dailyMatrix.sim[planDay] = Math.max(0, appData.dailyMatrix.sim[planDay] - getSimPlanWeight(item));
+                }
+                saveData();
+                updateUI();
+            }
+        }
+
+        // Other Sales Modals
+        function openGsmModal() { document.getElementById('gsm-amount').value = ''; openModal('modal-gsm'); }
+        function submitGsmSale() {
+            const amt = parseFloat(document.getElementById('gsm-amount').value) || 0;
+            if (amt > 0) {
+                const todayDate = new Date().getDate();
+                appData.dailyMatrix.gsm[todayDate] = (appData.dailyMatrix.gsm[todayDate] || 0) + amt;
+                appData.salesLog.gsm.unshift({ id: Date.now(), date: localDateString(), amount: amt });
+                saveData();
+                closeModal('modal-gsm');
+                updateUI();
+            }
+        }
+
+        function openShpdDirectModal() {
+            activeShpdType = 'Интернет';
+            document.getElementById('shpd-sale-request').value = '';
+            document.getElementById('shpd-sale-address').value = '';
+            document.getElementById('shpd-sale-client').value = '';
+            document.getElementById('shpd-sale-phone').value = '+7 ';
+            document.getElementById('shpd-sale-date').value = localDateString();
+            document.getElementById('shpd-type-internet').className = 'p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 font-semibold';
+            document.getElementById('shpd-type-tv').className = 'p-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold';
+            openModal('modal-shpd');
+        }
+        function submitShpdSale() {
+            const requestNumber = document.getElementById('shpd-sale-request').value.trim();
+            const address = document.getElementById('shpd-sale-address').value.trim();
+            const client = document.getElementById('shpd-sale-client').value.trim();
+            const phone = document.getElementById('shpd-sale-phone').value.trim();
+            const installationDate = document.getElementById('shpd-sale-date').value || localDateString();
+            const status = document.getElementById('shpd-sale-status')?.value || 'В работе';
+            if (!/^\d{13}$/.test(requestNumber)) {
+                alert('Номер заявки должен состоять ровно из 13 цифр.');
+                return;
+            }
+            if (!address || !client || !phone) {
+                alert('Заполните адрес, ФИО и номер телефона.');
+                return;
+            }
+            const todayDate = new Date().getDate();
+            const shpdFact = activeShpdType === 'Интернет + ТВ' ? 2 : 1;
+            appData.dailyMatrix.shpd[todayDate] = (appData.dailyMatrix.shpd[todayDate] || 0) + shpdFact;
+            appData.shpdList.unshift({
+                id: Date.now(),
+                type: activeShpdType,
+                requestNumber,
+                address,
+                client,
+                phone,
+                installationDate,
+                date: installationDate,
+                applicationDate: localDateString(),
+                status
+            });
+            saveData();
+            closeModal('modal-shpd');
+            updateUI();
+        }
+
+        function openRtkModal() { openModal('modal-rtk'); }
+        function submitRtkItem(name, price) {
+            const todayDate = new Date().getDate();
+            appData.dailyMatrix.rtk[todayDate] = (appData.dailyMatrix.rtk[todayDate] || 0) + price;
+            appData.salesLog.rtk.unshift({ id: Date.now(), date: localDateString(), amount: Number(price) || 0, name: name || '' });
+            saveData();
+            closeModal('modal-rtk');
+            updateUI();
+        }
+
+        function openSubsModal() { document.getElementById('subs-amount').value = '299'; openModal('modal-subs'); }
+        function submitSubsSale() {
+            const amt = parseFloat(document.getElementById('subs-amount').value) || 0;
+            if (amt > 0) {
+                const todayDate = new Date().getDate();
+                appData.dailyMatrix.subs[todayDate] = (appData.dailyMatrix.subs[todayDate] || 0) + amt;
+                appData.salesLog.subs.unshift({ id: Date.now(), date: localDateString(), amount: amt });
+                saveData();
+                closeModal('modal-subs');
+                updateUI();
+            }
+        }
+
+        // Registries
+        function openMnpModal() {
+            document.getElementById('mnp-client').value = '';
+            document.getElementById('mnp-temp-phone').value = '+7 ';
+            document.getElementById('mnp-port-phone').value = '+7 ';
+            document.getElementById('mnp-date').value = localDateString();
+            openModal('mnp-modal');
+        }
+        function closeMnpModal() { closeModal('mnp-modal'); }
+        function addMnpItem() {
+            const applicationDate = document.getElementById('mnp-date').value || localDateString();
+            appData.mnpList.unshift({
+                id: Date.now(),
+                client: document.getElementById('mnp-client').value || 'Клиент',
+                tempPhone: document.getElementById('mnp-temp-phone').value,
+                phone: document.getElementById('mnp-port-phone').value,
+                applicationDate,
+                transferDate: addDaysToDate(applicationDate, 8),
+                status: 'В работе'
+            });
+            saveData();
+            closeMnpModal();
+            updateUI();
+        }
+        function toggleMnpStatus(id) {
+            const item = appData.mnpList.find(i => i.id === id);
+            if (item) {
+                if (item.status === 'В работе') item.status = 'Перенесен';
+                else if (item.status === 'Перенесен') item.status = 'Отказ';
+                else item.status = 'В работе';
+                saveData();
+                updateUI();
+            }
+        }
+        function deleteMnp(id) {
+            appData.mnpList = appData.mnpList.filter(i => i.id !== id);
+            saveData();
+            updateUI();
+        }
+
+        function openShpdModal() {
+            activeRegistryShpdType = 'Интернет';
+            document.getElementById('shpd-address').value = '';
+            document.getElementById('shpd-client').value = '';
+            document.getElementById('shpd-phone').value = '+7 ';
+            document.getElementById('shpd-date').value = localDateString();
+            document.getElementById('shpd-status').value = 'В работе';
+            document.getElementById('registry-shpd-type-internet').className = 'p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 font-semibold';
+            document.getElementById('registry-shpd-type-tv').className = 'p-2.5 rounded-xl border border-slate-200 text-slate-700 font-semibold';
+            openModal('shpd-modal');
+        }
+        function closeShpdModal() { closeModal('shpd-modal'); }
+        function addShpdItem() {
+            const address = document.getElementById('shpd-address').value.trim();
+            const client = document.getElementById('shpd-client').value.trim();
+            const phone = document.getElementById('shpd-phone').value.trim();
+            const installationDate = document.getElementById('shpd-date').value || localDateString();
+            const status = document.getElementById('shpd-status')?.value || 'В работе';
+            if (!address || !client || !phone) {
+                alert('Заполните адрес, ФИО и номер телефона.');
+                return;
+            }
+            appData.shpdList.unshift({
+                id: Date.now(),
+                type: activeRegistryShpdType,
+                address,
+                client,
+                phone,
+                installationDate,
+                date: installationDate,
+                status
+            });
+            saveData();
+            closeShpdModal();
+            updateUI();
+        }
+        function setShpdStatus(id, status) {
+            const item = appData.shpdList.find(i => i.id === id);
+            if (item) {
+                item.status = status;
+                saveData();
+                updateUI();
+            }
+        }
+
+        function deleteShpd(id) {
+            appData.shpdList = appData.shpdList.filter(i => i.id !== id);
+            saveData();
+            updateUI();
+        }
+
+        // Salary Settings
+        function toggleSettings() {
+            const form = document.getElementById('salary-settings-form');
+            form.classList.toggle('hidden');
+        }
+        function saveSalarySettings() {
+            appData.salarySettings.basePay = parseFloat(document.getElementById('input-base').value) || 25000;
+            appData.salarySettings.daysWorked = parseInt(document.getElementById('input-days-worked').value) || 15;
+            appData.salarySettings.daysTotal = parseInt(document.getElementById('input-days-total').value) || 30;
+            saveData();
+            document.getElementById('salary-settings-form').classList.add('hidden');
+            updateUI();
+        }
+
+        // Plans Modal
+        function openPlanModal() {
+            document.getElementById('input-plan-sim').value = appData.plans.sim ?? 100;
+            document.getElementById('input-plan-mnp').value = appData.plans.mnp ?? 0;
+            document.getElementById('input-plan-gsm').value = appData.plans.gsm ?? 200000;
+            document.getElementById('input-plan-acc').value = appData.plans.acc ?? 0;
+            document.getElementById('input-plan-subs').value = appData.plans.subs ?? 15000;
+            document.getElementById('input-plan-shpd').value = appData.plans.shpd ?? 30;
+            document.getElementById('input-plan-rtk').value = appData.plans.rtk ?? 50000;
+            openModal('plan-modal');
+        }
+        function closePlanModal() { closeModal('plan-modal'); }
+        function savePlanSettings() {
+            appData.plans.sim = Math.max(0, parseFloat(document.getElementById('input-plan-sim').value) || 0);
+            appData.plans.mnp = Math.max(0, parseFloat(document.getElementById('input-plan-mnp').value) || 0);
+            appData.plans.gsm = Math.max(0, parseFloat(document.getElementById('input-plan-gsm').value) || 0);
+            appData.plans.acc = Math.max(0, parseFloat(document.getElementById('input-plan-acc').value) || 0);
+            appData.plans.subs = Math.max(0, parseFloat(document.getElementById('input-plan-subs').value) || 0);
+            appData.plans.shpd = Math.max(0, parseFloat(document.getElementById('input-plan-shpd').value) || 0);
+            appData.plans.rtk = Math.max(0, parseFloat(document.getElementById('input-plan-rtk').value) || 0);
+            saveData();
+            closePlanModal();
+            updateUI();
+        }
+
+        // Cell Matrix Editor
+        function openEditCellModal(key, title, day, unit) {
+            activeEditCell = { key, day };
+            document.getElementById('edit-cell-title').innerText = `День ${day} (${title})`;
+            document.getElementById('edit-cell-subtitle').innerText = `Введите фактическое значение за ${day}-й день`;
+            document.getElementById('edit-cell-label').innerText = `Значение (${unit})`;
+            const val = (appData.dailyMatrix[key] && appData.dailyMatrix[key][day]) || 0;
+            document.getElementById('input-cell-val').value = val;
+            openModal('modal-edit-cell');
+        }
+        function saveCellData() {
+            const val = parseFloat(document.getElementById('input-cell-val').value) || 0;
+            if (!appData.dailyMatrix[activeEditCell.key]) {
+                appData.dailyMatrix[activeEditCell.key] = {};
+            }
+            appData.dailyMatrix[activeEditCell.key][activeEditCell.day] = val;
+            saveData();
+            closeModal('modal-edit-cell');
+            updateUI();
+        }
+
+        function resetAllData() {
+            if (confirm('Сбросить текущие продажи за день?')) {
+                appData.dailyMatrix = { sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} };
+                appData.simSalesLog = [];
+                saveData();
+                updateUI();
+            }
+        }
+
+        let noteDraftImages = [];
+
+        function openNoteEditor(noteId = null) {
+            const modal = document.getElementById('note-editor-modal');
+            const note = noteId ? (appData.notesList || []).find(n => String(n.id) === String(noteId)) : null;
+            document.getElementById('note-edit-id').value = note ? note.id : '';
+            document.getElementById('note-editor-title').innerText = note ? 'Редактировать заметку' : 'Новая заметка';
+            document.getElementById('note-title-input').value = note ? (note.title || '') : '';
+            document.getElementById('note-text-input').value = note ? (note.text || '') : '';
+            noteDraftImages = note ? [...(note.images || [])] : [];
+            renderNoteImagesPreview();
+            document.getElementById('note-images-input').value = '';
+            modal.classList.remove('hidden');
+        }
+
+        function closeNoteEditor() {
+            document.getElementById('note-editor-modal').classList.add('hidden');
+            noteDraftImages = [];
+        }
+
+        function resizeNoteImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const maxSide = 1400;
+                        const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+                        const canvas = document.createElement('canvas');
+                        canvas.width = Math.max(1, Math.round(img.width * scale));
+                        canvas.height = Math.max(1, Math.round(img.height * scale));
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.78));
+                    };
+                    img.onerror = reject;
+                    img.src = reader.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function handleNoteImages(files) {
+            const selected = Array.from(files || []).filter(f => f.type.startsWith('image/'));
+            for (const file of selected) {
+                try {
+                    if (noteDraftImages.length >= 8) break;
+                    noteDraftImages.push(await resizeNoteImage(file));
+                } catch (e) { console.error('Ошибка загрузки фото', e); }
+            }
+            renderNoteImagesPreview();
+        }
+
+        function renderNoteImagesPreview() {
+            const box = document.getElementById('note-images-preview');
+            if (!box) return;
+            box.innerHTML = noteDraftImages.map((src, i) => `
+                <div class="relative aspect-square rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+                    <img src="${src}" class="w-full h-full object-cover" alt="Фото заметки">
+                    <button onclick="removeNoteImage(${i})" class="absolute top-1 right-1 bg-black/60 text-white w-6 h-6 rounded-full text-xs"><i class="fa-solid fa-xmark"></i></button>
+                </div>`).join('');
+        }
+
+        function removeNoteImage(index) {
+            noteDraftImages.splice(index, 1);
+            renderNoteImagesPreview();
+        }
+
+        function saveNote() {
+            const title = document.getElementById('note-title-input').value.trim() || 'Без названия';
+            const text = document.getElementById('note-text-input').value.trim();
+            const editId = document.getElementById('note-edit-id').value;
+            appData.notesList = Array.isArray(appData.notesList) ? appData.notesList : [];
+            if (editId) {
+                const note = appData.notesList.find(n => String(n.id) === String(editId));
+                if (note) { note.title = title; note.text = text; note.images = [...noteDraftImages]; note.updatedAt = new Date().toISOString(); }
+            } else {
+                appData.notesList.unshift({ id: Date.now(), title, text, images: [...noteDraftImages], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+            }
+            appData.notes = '';
+            saveData();
+            closeNoteEditor();
+            renderNotesList();
+        }
+
+        function deleteNote(noteId) {
+            if (!confirm('Удалить эту заметку?')) return;
+            appData.notesList = (appData.notesList || []).filter(n => String(n.id) !== String(noteId));
+            saveData();
+            renderNotesList();
+        }
+
+        function renderNotesList() {
+            const box = document.getElementById('notes-list');
+            if (!box) return;
+            const notes = Array.isArray(appData.notesList) ? appData.notesList : [];
+            if (!notes.length) {
+                box.innerHTML = `
+                    <div class="bg-white border border-dashed border-slate-200 rounded-2xl p-8 text-center">
+                        <i class="fa-regular fa-note-sticky text-3xl text-slate-300"></i>
+                        <p class="text-sm font-semibold text-slate-600 mt-2">Пока нет заметок</p>
+                        <p class="text-xs text-slate-400 mt-1">Создайте первую заметку и при необходимости прикрепите фото.</p>
+                    </div>`;
+                return;
+            }
+            box.innerHTML = notes.map(note => {
+                const images = note.images || [];
+                const safeText = (note.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+                return `
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <h3 class="font-bold text-slate-800 text-sm break-words">${(note.title || 'Без названия').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</h3>
+                                <p class="text-[9px] text-slate-400 mt-0.5">Изменено: ${new Date(note.updatedAt || note.createdAt || Date.now()).toLocaleString('ru-RU')}</p>
+                            </div>
+                            <div class="flex gap-1 shrink-0">
+                                <button onclick="openNoteEditor(${note.id})" class="text-slate-400 hover:text-brand-600 p-1.5"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteNote(${note.id})" class="text-slate-400 hover:text-red-500 p-1.5"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                        ${safeText ? `<div class="mt-3 text-xs text-slate-600 whitespace-normal break-words leading-relaxed">${safeText}</div>` : ''}
+                        ${images.length ? `<div class="grid grid-cols-3 gap-2 mt-3">${images.map(src => `<img src="${src}" class="w-full aspect-square object-cover rounded-xl border border-slate-100" alt="Фото заметки">`).join('')}</div>` : ''}
+                    </div>`;
+            }).join('');
+        }
+
+        // Main Categories Grid on Sales Tab
+        function renderCategories() {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = `
+                <div class="sales-grid">
+                    <button onclick="startSimFlow()" class="sale-tile sale-tile-main">
+                        <span class="sale-icon"><i class="fa-solid fa-sim-card"></i></span>
+                        <span class="sale-title">СИМ / МНП</span>
+                        <span class="sale-subtitle">Подключение и перенос</span>
+                        <span class="sale-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </button>
+                    <button onclick="openGsmModal()" class="sale-tile">
+                        <span class="sale-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+                        <span class="sale-title">Телефоны</span>
+                        <span class="sale-subtitle">GSM и гаджеты</span>
+                        <span class="sale-arrow"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <button onclick="openShpdDirectModal()" class="sale-tile">
+                        <span class="sale-icon"><i class="fa-solid fa-house-signal"></i></span>
+                        <span class="sale-title">Домашний интернет</span>
+                        <span class="sale-subtitle">ШПД и ТВ</span>
+                        <span class="sale-arrow"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <button onclick="openRtkModal()" class="sale-tile">
+                        <span class="sale-icon"><i class="fa-solid fa-tv"></i></span>
+                        <span class="sale-title">РТК</span>
+                        <span class="sale-subtitle">Услуги и оборудование</span>
+                        <span class="sale-arrow"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <button onclick="openSubsModal()" class="sale-tile">
+                        <span class="sale-icon"><i class="fa-solid fa-layer-group"></i></span>
+                        <span class="sale-title">Подписки</span>
+                        <span class="sale-subtitle">Сервисы и доп. услуги</span>
+                        <span class="sale-arrow"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                </div>
+            `;
+        }
+
+        // Main Update UI Engine
+        function getSimPlanWeight(sale) {
+            if (!sale || sale.npd) return 0;
+            return 1;
+        }
+
+        function calculateSimKpi() {
+            const sales = Array.isArray(appData.simSalesLog) ? appData.simSalesLog : [];
+            const eligible = sales.filter(s => !s.npd);
+            const appCount = eligible.filter(s => (s.registration || 'AppSeller') === 'AppSeller').length;
+            const webCount = eligible.filter(s => s.registration === 'WebSeller').length;
+            const registrations = appCount + webCount;
+            const appSellerShare = registrations ? (appCount / registrations) * 100 : 100;
+            return { appSellerShare, appCount, webCount };
+        }
+
+        let activeSalesReportTab = 'sim';
+        function switchSalesReportTab(tab) {
+            activeSalesReportTab = tab;
+            ['sim','gsm','acc','subs','shpd','rtk'].forEach(k => {
+                const b = document.getElementById('sales-report-btn-' + k);
+                if (b) b.className = k === tab ? 'py-2 text-[10px] font-semibold rounded-lg bg-white text-slate-800 shadow-sm' : 'py-2 text-[10px] font-semibold rounded-lg text-slate-600';
+            });
+            const wrap = document.getElementById('report-promo-filter-wrap');
+            if (wrap) wrap.classList.toggle('hidden', tab !== 'sim');
+            renderSalesReport();
+        }
+        function reportDateInRange(date, from, to) { if (!date) return true; if (from && date < from) return false; if (to && date > to) return false; return true; }
+        function renderSalesReport() {
+            const box = document.getElementById('sales-report-content'); if (!box) return;
+            const from = document.getElementById('report-date-from')?.value || '', to = document.getElementById('report-date-to')?.value || '', promo = document.getElementById('report-promo-filter')?.value || '', tab = activeSalesReportTab;
+            let rows = [], total = 0;
+            if (tab === 'sim') {
+                rows = (appData.simSalesLog || []).filter(s => reportDateInRange(s.saleDate || '', from, to) && (!promo || (s.promo || 'Нет') === promo)); total = rows.length;
+                box.innerHTML = rows.length ? rows.map(s => `<div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs"><div class="grid grid-cols-2 gap-2"><div><span class="text-slate-400">Дата продажи</span><div class="font-semibold">${s.saleDate || '—'}</div></div><div><span class="text-slate-400">Тариф</span><div class="font-semibold">${s.tariff || '—'}</div></div><div><span class="text-slate-400">Акция</span><div class="font-semibold">${s.promo || 'Нет'}</div></div><div><span class="text-slate-400">Паспорт</span><div class="font-semibold">${s.passport || '—'}</div></div></div></div>`).join('') : '<p class="text-xs text-slate-400 text-center py-4">Нет продаж по выбранным условиям</p>';
+            } else if (tab === 'shpd') {
+                rows = (appData.shpdList || []).filter(s => reportDateInRange(s.applicationDate || s.date || '', from, to)); total = rows.length;
+                box.innerHTML = rows.length ? rows.map(s => `<div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs flex justify-between gap-3"><div><span class="text-slate-400">Дата подачи</span><div class="font-semibold">${s.applicationDate || s.date || '—'}</div></div><div class="text-right"><span class="text-slate-400">№ заявки</span><div class="font-semibold">${s.requestNumber || '—'}</div></div></div>`).join('') : '<p class="text-xs text-slate-400 text-center py-4">Нет заявок по выбранным условиям</p>';
+            } else {
+                rows = ((appData.salesLog && appData.salesLog[tab]) || []).filter(s => reportDateInRange(s.date || '', from, to)); total = rows.reduce((sum,s) => sum + Number(s.amount || 0),0);
+                box.innerHTML = rows.length ? rows.map(s => `<div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs flex justify-between"><span class="text-slate-500">${s.date || '—'}</span><span class="font-bold">${Number(s.amount || 0).toLocaleString('ru-RU')} ₽</span></div>`).join('') : '<p class="text-xs text-slate-400 text-center py-4">Нет продаж по выбранным условиям</p>';
+            }
+            const badge = document.getElementById('sales-report-total'); if (badge) badge.textContent = (tab === 'sim' || tab === 'shpd') ? `${total} шт.` : `${Number(total).toLocaleString('ru-RU')} ₽`;
+        }
+
+        function updateUI() {
+            renderCategories();
+            renderSalesReport();
+
+            let actuals = { sim: 0, gsm: 0, acc: 0, shpd: 0, rtk: 0, subs: 0 };
+            Object.keys(appData.dailyMatrix).forEach(k => {
+                const daysObj = appData.dailyMatrix[k] || {};
+                Object.values(daysObj).forEach(v => {
+                    actuals[k] += (v || 0);
+                });
+            });
+
+            const simPlan = Math.max(1, appData.plans.sim || 100);
+            const simStats = calculateSimKpi();
+
+            // Выполнение плана — это план всего салона. Источник факта: таблица
+            // «План СИМ по дням», а не личный журнал продаж сотрудника.
+            const simActual = actuals.sim;
+            const simPlanCompletionPct = (simActual / simPlan) * 100;
+
+            // Фактический уровень выполнения плана.
+            function getTierByPercent(percent) {
+                if (percent >= 100) return { key: 'high', text: '100% и выше' };
+                if (percent >= 95) return { key: 'mid', text: '95% – 99.99%' };
+                return { key: 'low', text: 'Ниже 95%' };
+            }
+
+            const simTier = getTierByPercent(simPlanCompletionPct);
+
+            // Прогноз: текущий календарный темп выполнения плана всего салона
+            // переносится на оставшуюся часть текущего календарного месяца.
+            const now = new Date();
+            const calendarDay = Math.max(1, now.getDate());
+            const daysTotal = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            const forecastedSimActual = (simActual / calendarDay) * daysTotal;
+            const simForecastCompletionPct = (forecastedSimActual / simPlan) * 100;
+            const simForecastTier = getTierByPercent(simForecastCompletionPct);
+
+            const simPayouts = {
+                "Black": { low: 75, mid: 150, high: 400 },
+                "Мой онлайн+": { low: 20, mid: 40, high: 250 },
+                "Мой онлайн": { low: 15, mid: 25, high: 150 },
+                "Мой разговор": { low: 20, mid: 40, high: 50 },
+                "Игровой": { low: 100, mid: 100, high: 500 },
+                "Премиум": { low: 100, mid: 100, high: 700 },
+                "ИДУ+": { low: 5, mid: 10, high: 100 },
+                "ИДВ": { low: 5, mid: 10, high: 100 },
+                "Классика (посекундный)": { low: 1, mid: 1, high: 1 },
+                "ИДУ": { low: 5, mid: 10, high: 100 },
+                "Интернет для устройств мини": { low: 25, mid: 75, high: 150 },
+                "Везде онлайн": { low: 20, mid: 40, high: 150 },
+                "Сим-карта B2B (без привязки к выполнению плана)": { fixed: 100 },
+                "Классика+MIXX": { low: 5, mid: 20, high: 550 },
+                "Хватит": { low: 25, mid: 50, high: 100 },
+                "ТП для мигрантов": { low: 50, mid: 150, high: 300 },
+                "Партнер М": { low: 1, mid: 1, high: 1 },
+                "Партнер М ИМ": { fixed: 400 },
+                "Black Семейная": { low: 75, mid: 150, high: 300 },
+                "МО+ Семейная": { low: 30, mid: 75, high: 150 },
+                "МО Семейная": { low: 25, mid: 50, high: 75 }
+            };
+
+            const mnpPlan = Number(appData.plans.mnp || 0);
+            const mnpFact = appData.simSalesLog.filter(s => s.type === 'MNP' && !s.npd).length;
+            const mnpCompletionPct = mnpPlan > 0 ? (mnpFact / mnpPlan) * 100 : 100;
+            const mnpCoef = (mnpPlan > 0 && mnpCompletionPct < 100) ? 0.8 : 1;
+
+            // Прогноз МНП также использует календарный темп, а не рабочие дни сотрудника.
+            const forecastedMnpFact = (mnpFact / calendarDay) * daysTotal;
+            const mnpForecastCompletionPct = mnpPlan > 0 ? (forecastedMnpFact / mnpPlan) * 100 : 100;
+            const mnpForecastCoef = (mnpPlan > 0 && mnpForecastCompletionPct < 100) ? 0.8 : 1;
+
+            // Если доля SIM через AppSeller меньше 50%, обычные SIM считаются с коэффициентом 0,5.
+            // Для Золота и Абонемента коэффициенты не применяются.
+            const appSellerCoef = simStats.appSellerShare < 50 ? 0.5 : 1;
+
+            function getSimPayout(sale, tierKey, currentMnpCoef) {
+                if (sale.npd) return 0;
+
+                // Золото: фиксированный бонус 500 ₽ без понижающих коэффициентов.
+                if (sale.promo === 'Золото') {
+                    return 500;
+                }
+
+                // Абонемент: 20% от фактической стоимости без понижающих коэффициентов.
+                if (sale.promo === 'Абонемент') {
+                    const subscriptionPrice = Number(sale.subscriptionPrice || 0);
+                    return subscriptionPrice * 0.20;
+                }
+
+                let tariff = sale.tariff;
+                if (sale.promo === 'Семейный') {
+                    const familyMap = { 'Black':'Black Семейная', 'Мой онлайн+':'МО+ Семейная', 'Мой онлайн':'МО Семейная' };
+                    tariff = familyMap[tariff] || tariff;
+                }
+
+                const p = simPayouts[tariff];
+                if (!p) return 0;
+                let bonus = p.fixed != null ? p.fixed : (p[tierKey] ?? 0);
+
+                bonus *= appSellerCoef;
+                bonus *= currentMnpCoef;
+                return bonus;
+            }
+
+            let totalSimBonus = 0;
+            let totalSimForecastBonus = 0;
+            appData.simSalesLog.forEach(sale => {
+                totalSimBonus += getSimPayout(sale, simTier.key, mnpCoef);
+                totalSimForecastBonus += getSimPayout(sale, simForecastTier.key, mnpForecastCoef);
+            });
+
+
+            // Расчет бонусов по остальным направлениям.
+            // Выполнение берется из тех же фактических значений таблицы планов,
+            // а ставка личного бонуса зависит от уровня выполнения плана.
+            const otherDirections = [
+                { key: 'sim', title: 'СИМ-карты', unit: 'шт', target: simPlan, actual: simActual, factBonus: totalSimBonus, forecastBonus: totalSimForecastBonus, factPct: simPlanCompletionPct, forecastPct: simForecastCompletionPct, custom: true },
+                { key: 'gsm', title: 'GSM / Железо', unit: '₽', target: Number(appData.plans.gsm || 0), actual: Number(actuals.gsm || 0), lowRate: 0.01, highRate: 0.02, mode: 'percent' },
+                { key: 'acc', title: 'Аксессуары', unit: '₽', target: Number(appData.plans.acc || 0), actual: Number(actuals.acc || 0), lowRate: 0.02, highRate: 0.04, mode: 'percent' },
+                { key: 'subs', title: 'Подписки', unit: '₽', target: Number(appData.plans.subs || 0), actual: Number(actuals.subs || 0), lowRate: 0.05, highRate: 0.10, mode: 'percent' },
+                { key: 'shpd', title: 'ШПД / ТВ РТК', unit: 'шт', target: Number(appData.plans.shpd || 0), actual: Number(actuals.shpd || 0), lowRate: 500, highRate: 1000, mode: 'fixed' },
+                { key: 'rtk', title: 'РТК', unit: '₽', target: Number(appData.plans.rtk || 0), actual: Number(actuals.rtk || 0), lowRate: 0.05, highRate: 0.20, mode: 'percent' }
+            ];
+
+            let otherBonusFact = 0;
+            let otherBonusForecast = 0;
+            const otherCards = [];
+            otherDirections.forEach(d => {
+                let factPct = d.factPct;
+                let forecastPct = d.forecastPct;
+                let factBonus = d.factBonus;
+                let forecastBonus = d.forecastBonus;
+                if (!d.custom) {
+                    factPct = d.target > 0 ? (d.actual / d.target) * 100 : 0;
+                    const projected = calendarDay > 0 ? (d.actual / calendarDay) * daysTotal : 0;
+                    forecastPct = d.target > 0 ? (projected / d.target) * 100 : 0;
+                    const factRate = d.key === 'shpd' ? (factPct >= 100 ? d.highRate : d.lowRate) : (factPct > 100 ? d.highRate : d.lowRate);
+                    const forecastRate = d.key === 'shpd' ? (forecastPct >= 100 ? d.highRate : d.lowRate) : (forecastPct > 100 ? d.highRate : d.lowRate);
+                    factBonus = d.target > 0 ? d.actual * factRate : 0;
+                    forecastBonus = d.target > 0 ? d.actual * forecastRate : 0;
+                }
+                otherBonusFact += factBonus;
+                otherBonusForecast += forecastBonus;
+                const formatBonus = v => `${Math.round(v).toLocaleString('ru-RU')} ₽`;
+                const formatValue = v => d.unit === '₽' ? `${Math.round(v).toLocaleString('ru-RU')} ₽` : `${Math.round(v).toLocaleString('ru-RU')} шт`;
+                otherCards.push(`
+                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <div class="font-semibold text-slate-800 text-xs">${d.title}</div>
+                                <div class="text-[10px] text-slate-500 mt-0.5">План: ${formatValue(d.target)} · Факт: ${formatValue(d.actual)}</div>
+                            </div>
+                            <div class="text-right text-[10px]">
+                                <div class="font-semibold text-brand-600">Факт ${factPct.toFixed(1)}%</div>
+                                <div class="font-semibold text-emerald-600">Прогноз ${forecastPct.toFixed(1)}%</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <div class="bg-white rounded-lg p-2">
+                                <div class="text-[9px] text-slate-400">Бонус по факту</div>
+                                <div class="font-bold text-brand-700 text-sm">${formatBonus(factBonus)}</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-2">
+                                <div class="text-[9px] text-slate-400">Бонус по прогнозу</div>
+                                <div class="font-bold text-emerald-700 text-sm">${formatBonus(forecastBonus)}</div>
+                            </div>
+                        </div>
+                    </div>`);
+            });
+            document.getElementById('other-bonus-cards').innerHTML = otherCards.join('');
+            // В объединённом блоке СИМ уже является одним из направлений, поэтому
+            // итог считается напрямую как сумма всех карточек без отдельного блока СИМ.
+            const totalBonusFact = otherBonusFact;
+            const totalBonusForecast = otherBonusForecast;
+            document.getElementById('calc-total-bonus').innerText = `${Math.round(totalBonusFact).toLocaleString('ru-RU')} ₽`;
+            document.getElementById('calc-total-forecast-bonus').innerText = `${Math.round(totalBonusForecast).toLocaleString('ru-RU')} ₽`;
+
+            // Оклад и аванс полностью исключены из расчёта.
+            // Зарплата = только бонусы за продажи по всем направлениям.
+            const totalEstimatedPay = Math.round(totalBonusFact);
+            const forecastPay = Math.round(totalBonusForecast);
+            document.getElementById('calc-total-pay').innerText = `${totalEstimatedPay.toLocaleString('ru-RU')} ₽`;
+            document.getElementById('calc-forecast-pay').innerText = `${forecastPay.toLocaleString('ru-RU')} ₽`;
+
+            const pList = [
+                { key: 'sim', title: 'СИМ-карты', actual: actuals.sim, target: simPlan, unit: 'шт' },
+                { key: 'gsm', title: 'GSM / Железо', actual: actuals.gsm, target: appData.plans.gsm || 0, unit: '₽' },
+                { key: 'acc', title: 'Аксессуары', actual: actuals.acc, target: appData.plans.acc || 0, unit: '₽' },
+                { key: 'subs', title: 'Подписки', actual: actuals.subs, target: appData.plans.subs || 0, unit: '₽' },
+                { key: 'shpd', title: 'ШПД / ТВ РТК', actual: actuals.shpd, target: appData.plans.shpd || 0, unit: 'шт' },
+                { key: 'rtk', title: 'РТК', actual: actuals.rtk, target: appData.plans.rtk || 0, unit: '₽' }
+            ];
+
+            renderExcelMatrix(pList);
+
+            // MNP list render
+            const mnpContainer = document.getElementById('mnp-list');
+            mnpContainer.innerHTML = '';
+            if (appData.mnpList.length === 0) {
+                mnpContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Нет заявок МНП</p>';
+            } else {
+                appData.mnpList.forEach(item => {
+                    const badge = item.status === 'Перенесен' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 
+                                  item.status === 'Отказ' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-amber-50 text-amber-600 border-amber-200';
+                    const div = document.createElement('div');
+                    div.className = 'bg-white p-3.5 rounded-xl border border-slate-100 shadow-sm space-y-2 text-xs';
+                    div.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <p class="font-bold text-slate-900 text-sm">${item.client}</p>
+                            <button onclick="toggleMnpStatus(${item.id})" class="px-2.5 py-0.5 rounded-full border font-semibold ${badge}">${item.status}</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-slate-600 bg-slate-50 p-2.5 rounded-lg">
+                            <div>
+                                <span class="text-[10px] text-slate-400 block">Переносимый номер:</span>
+                                <span class="font-semibold text-slate-800">${item.phone}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-slate-400 block">Временный номер:</span>
+                                <span class="font-semibold text-slate-800">${item.tempPhone && item.tempPhone !== '-' ? item.tempPhone : '—'}</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center pt-1 text-[11px]">
+                            <span class="text-slate-500">Подача: <strong class="text-slate-700">${item.applicationDate || '—'}</strong> • Перенос: <strong class="text-brand-600">${item.transferDate || '—'}</strong></span>
+                            <button onclick="deleteMnp(${item.id})" class="text-slate-300 hover:text-red-500 px-2 py-1"><i class="fa-solid fa-trash-can"></i> Удалить</button>
+                        </div>
+                    `;
+                    mnpContainer.appendChild(div);
+                });
+            }
+
+            // Shpd list render
+            const shpdContainer = document.getElementById('shpd-list');
+            shpdContainer.innerHTML = '';
+            if (appData.shpdList.length === 0) {
+                shpdContainer.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Нет подключений</p>';
+            } else {
+                appData.shpdList.forEach(item => {
+                    const div = document.createElement('div');
+                    const status = item.status || 'В работе';
+            const requestNumber = item.requestNumber || '—';
+                    const statusClass = status === 'Установлен' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : status === 'Отказано' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-amber-50 text-amber-600 border-amber-200';
+                    div.className = 'bg-white p-3 rounded-xl border border-slate-100 shadow-sm text-xs';
+                    div.innerHTML = `
+                        <div class="flex justify-between items-start gap-2">
+                            <div class="space-y-1.5 min-w-0">
+                                <p class="font-bold text-slate-800"><i class="fa-solid fa-location-dot mr-1 text-brand-600"></i>${item.address}</p>
+                                <p class="text-slate-600"><strong>${item.client || '—'}</strong> • ${item.phone || '—'}</p>
+                                <p class="text-slate-500"><span class="font-semibold text-slate-700">${item.type || 'Интернет'}</span> • Установка: <strong class="text-brand-600">${item.installationDate || item.date || '—'}</strong></p>
+                            </div>
+                            <button onclick="deleteShpd(${item.id})" class="text-slate-300 hover:text-red-500 p-2 shrink-0"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between gap-2">
+                            <span class="text-[10px] text-slate-400">Статус заявки</span>
+                            <select onchange="setShpdStatus(${item.id}, this.value)" class="text-[11px] font-semibold px-2 py-1 rounded-full border ${statusClass} focus:outline-none">
+                                <option value="В работе" ${status === 'В работе' ? 'selected' : ''}>В работе</option>
+                                <option value="Установлен" ${status === 'Установлен' ? 'selected' : ''}>Установлен</option>
+                                <option value="Отказано" ${status === 'Отказано' ? 'selected' : ''}>Отказано</option>
+                            </select>
+                        </div>
+                    `;
+                    shpdContainer.appendChild(div);
+                });
+            }
+
+            renderNotesList();
+        }
+
+        function renderExcelMatrix(pList) {
+            const table = document.getElementById('excel-matrix-table');
+            let html = `
+                <thead>
+                    <tr class="bg-slate-100 text-slate-700 text-[10px] border-b border-slate-200">
+                        <th class="p-1.5 font-semibold">Направление</th>
+                        <th class="p-1.5 font-semibold text-center">В день</th>
+                        <th class="p-1.5 font-semibold text-center">План</th>
+                        <th class="p-1.5 font-semibold text-center">Прог.%</th>
+                        <th class="p-1.5 font-semibold text-center">Факт</th>
+                        <th class="p-1.5 font-semibold text-center">Факт%</th>
+                        <th class="p-1.5 font-semibold text-center">Осталось</th>
+            `;
+            for (let d = 1; d <= 31; d++) {
+                const dayOfWeekIndex = (d + 2) % 7;
+                const isWeekend = (dayOfWeekIndex === 5 || dayOfWeekIndex === 6);
+                const bgHeader = isWeekend ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-800';
+                html += `<th class="p-1 text-center font-bold ${bgHeader} min-w-[28px]">${d}</th>`;
+            }
+            html += `</tr></thead><tbody>`;
+
+            pList.forEach(p => {
+                const now = new Date();
+                const calendarDay = Math.max(1, now.getDate());
+                const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+                const targetPerDay = Math.round((p.target / daysInMonth) * 10) / 10;
+                const projected = (p.actual / calendarDay) * daysInMonth;
+                const forecastPct = Math.round((projected / (p.target || 1)) * 100);
+                const factPct = Math.round((p.actual / (p.target || 1)) * 100);
+                const remaining = Math.max(0, p.target - p.actual);
+
+                html += `
+                    <tr class="border-b border-slate-100 hover:bg-slate-50">
+                        <td class="p-1.5 font-medium text-slate-800 whitespace-nowrap">${p.title} (${p.unit})</td>
+                        <td class="p-1.5 text-center text-slate-500">${targetPerDay}</td>
+                        <td class="p-1.5 text-center font-bold text-slate-800">${p.target.toLocaleString()}</td>
+                        <td class="p-1.5 text-center text-brand-600 font-semibold">${forecastPct}%</td>
+                        <td class="p-1.5 text-center font-bold text-slate-800">${Math.round(p.actual).toLocaleString()}</td>
+                        <td class="p-1.5 text-center text-emerald-600 font-semibold">${factPct}%</td>
+                        <td class="p-1.5 text-center text-slate-500">${remaining.toLocaleString()}</td>
+                `;
+
+                for (let d = 1; d <= 31; d++) {
+                    const dayVal = (appData.dailyMatrix[p.key] && appData.dailyMatrix[p.key][d]) || 0;
+                    const cellBg = dayVal > 0 ? 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-200' : 'text-slate-300 bg-slate-50/50';
+                    html += `
+                        <td class="p-0.5 text-center">
+                            <button onclick="openEditCellModal('${p.key}', '${p.title}', ${d}, '${p.unit}')" class="w-7 h-7 text-[10px] rounded flex items-center justify-center transition ${cellBg}" title="День ${d}: ${dayVal}">
+                                ${dayVal > 0 ? dayVal : '0'}
+                            </button>
+                        </td>
+                    `;
+                }
+                html += `</tr>`;
+            });
+
+            html += `</tbody>`;
+            table.innerHTML = html;
+        }
+
+        window.onload = function() {
+            loadData();
+            updateUI();
+        };
+    </script>
+</body>
+</html>

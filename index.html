@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор ЗП Салона Связи</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -776,12 +777,12 @@ nav span{font-size:9px!important;margin-top:4px!important}
         };
         let activeEditCell = { key: '', day: 1 };
 
-        function loadData() {
-            try {
-                const saved = localStorage.getItem('salon_app_data_v9');
-                if (saved) {
-                    appData = JSON.parse(saved);
-                }
+        const telegramApp = window.Telegram?.WebApp || null;
+        const telegramInitData = telegramApp?.initData || '';
+        let cloudSaveTimer = null;
+        let cloudSaveInProgress = false;
+
+        function normalizeAppData() {
                 appData.salesLog = appData.salesLog || { gsm: [], acc: [], subs: [], rtk: [] };
                 ['gsm','acc','subs','rtk'].forEach(k => { appData.salesLog[k] = appData.salesLog[k] || []; });
                 appData.dailyMatrix = appData.dailyMatrix || {};
@@ -800,8 +801,29 @@ nav span{font-size:9px!important;margin-top:4px!important}
                 if (appData.notes && appData.notesList.length === 0) {
                     appData.notesList.push({ id: Date.now(), title: 'Старая заметка', text: appData.notes, images: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
                 }
+        }
+
+        async function loadData() {
+            try {
+                if (telegramInitData) {
+                    const response = await fetch('/api/data', {
+                        headers: { 'X-Telegram-Init-Data': telegramInitData },
+                        cache: 'no-store'
+                    });
+                    if (!response.ok) throw new Error('Не удалось загрузить данные с сервера');
+                    const payload = await response.json();
+                    if (payload.data) appData = payload.data;
+                } else {
+                    const saved = localStorage.getItem('salon_app_data_v9');
+                    if (saved) appData = JSON.parse(saved);
+                }
+                normalizeAppData();
             } catch (e) {
-                console.error("Error loading data", e);
+                console.error('Error loading data', e);
+                const saved = localStorage.getItem('salon_app_data_v9');
+                if (saved) {
+                    try { appData = JSON.parse(saved); normalizeAppData(); } catch (_) {}
+                }
             }
         }
 
@@ -809,8 +831,30 @@ nav span{font-size:9px!important;margin-top:4px!important}
             try {
                 localStorage.setItem('salon_app_data_v9', JSON.stringify(appData));
             } catch (e) {
-                console.error("Error saving data", e);
+                console.error('Error saving local data', e);
             }
+
+            if (!telegramInitData) return;
+            clearTimeout(cloudSaveTimer);
+            cloudSaveTimer = setTimeout(async () => {
+                if (cloudSaveInProgress) return;
+                cloudSaveInProgress = true;
+                try {
+                    const response = await fetch('/api/data', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Telegram-Init-Data': telegramInitData
+                        },
+                        body: JSON.stringify({ data: appData })
+                    });
+                    if (!response.ok) throw new Error('Не удалось сохранить данные');
+                } catch (e) {
+                    console.error('Error saving cloud data', e);
+                } finally {
+                    cloudSaveInProgress = false;
+                }
+            }, 250);
         }
 
         function switchTab(tabId) {
@@ -1855,8 +1899,12 @@ nav span{font-size:9px!important;margin-top:4px!important}
             table.innerHTML = html;
         }
 
-        window.onload = function() {
-            loadData();
+        window.onload = async function() {
+            if (telegramApp) {
+                telegramApp.ready();
+                telegramApp.expand();
+            }
+            await loadData();
             updateUI();
         };
     </script>

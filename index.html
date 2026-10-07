@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор ЗП Салона Связи</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -199,22 +199,6 @@ nav span{font-size:9px!important;margin-top:4px!important}
 
         <!-- TAB 2: SALARY & PLANS -->
         <div id="tab-salary" class="tab-content space-y-4">
-
-            <!-- SIM Daily Plan Table -->
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-semibold text-slate-800 text-sm"><i class="fa-solid fa-table mr-1 text-brand-600"></i> План СИМ по дням</h3>
-                    <button onclick="openPlanModal()" class="text-xs text-brand-600 font-medium hover:underline">
-                        <i class="fa-solid fa-pen mr-1"></i> Планы
-                    </button>
-                </div>
-                <div class="overflow-x-auto pb-2 -mx-2 px-2">
-                    <table class="w-full text-left border-collapse text-[11px]" id="excel-matrix-table">
-                        <!-- Generated via JS -->
-                    </table>
-                </div>
-            </div>
-
             <!-- SALARY SETTINGS + TOTAL -->
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
                 <div class="flex justify-between items-center">
@@ -254,6 +238,20 @@ nav span{font-size:9px!important;margin-top:4px!important}
                 </div>
             </div>
 
+            <!-- SIM Daily Plan Table -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-slate-800 text-sm"><i class="fa-solid fa-table mr-1 text-brand-600"></i> План СИМ по дням</h3>
+                    <button onclick="openPlanModal()" class="text-xs text-brand-600 font-medium hover:underline">
+                        <i class="fa-solid fa-pen mr-1"></i> Планы
+                    </button>
+                </div>
+                <div class="overflow-x-auto pb-2 -mx-2 px-2">
+                    <table class="w-full text-left border-collapse text-[11px]" id="excel-matrix-table">
+                        <!-- Generated via JS -->
+                    </table>
+                </div>
+            </div>
         </div>
 
         <!-- TAB 3: REGISTRIES -->
@@ -777,84 +775,113 @@ nav span{font-size:9px!important;margin-top:4px!important}
         };
         let activeEditCell = { key: '', day: 1 };
 
-        const telegramApp = window.Telegram?.WebApp || null;
-        const telegramInitData = telegramApp?.initData || '';
-        let cloudSaveTimer = null;
-        let cloudSaveInProgress = false;
-
         function normalizeAppData() {
-                appData.salesLog = appData.salesLog || { gsm: [], acc: [], subs: [], rtk: [] };
-                ['gsm','acc','subs','rtk'].forEach(k => { appData.salesLog[k] = appData.salesLog[k] || []; });
-                appData.dailyMatrix = appData.dailyMatrix || {};
-                ['sim','gsm','acc','shpd','rtk','subs'].forEach(k => { appData.dailyMatrix[k] = appData.dailyMatrix[k] || {}; });
-                appData.plans = Object.assign({ sim: 100, mnp: 0, gsm: 200000, acc: 0, shpd: 30, rtk: 50000, subs: 15000 }, appData.plans || {});
-                appData.salarySettings = Object.assign({ basePay: 25000, daysWorked: 15, daysTotal: 30 }, appData.salarySettings || {});
-                appData.simSalesLog = Array.isArray(appData.simSalesLog) ? appData.simSalesLog : [];
-                appData.mnpList = Array.isArray(appData.mnpList) ? appData.mnpList : [];
-                appData.shpdList = Array.isArray(appData.shpdList) ? appData.shpdList : [];
-                appData.dailyMatrix = Object.assign({ sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} }, appData.dailyMatrix || {});
-                Object.keys({ sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} }).forEach(k => {
-                    appData.dailyMatrix[k] = appData.dailyMatrix[k] && typeof appData.dailyMatrix[k] === 'object' ? appData.dailyMatrix[k] : {};
-                });
-                appData.notes = appData.notes || '';
-                appData.notesList = Array.isArray(appData.notesList) ? appData.notesList : [];
-                if (appData.notes && appData.notesList.length === 0) {
-                    appData.notesList.push({ id: Date.now(), title: 'Старая заметка', text: appData.notes, images: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
-                }
+            appData.salesLog = appData.salesLog || { gsm: [], acc: [], subs: [], rtk: [] };
+            ['gsm','acc','subs','rtk'].forEach(k => { appData.salesLog[k] = appData.salesLog[k] || []; });
+            appData.dailyMatrix = appData.dailyMatrix || {};
+            ['sim','gsm','acc','shpd','rtk','subs'].forEach(k => { appData.dailyMatrix[k] = appData.dailyMatrix[k] || {}; });
+            appData.plans = Object.assign({ sim: 100, mnp: 0, gsm: 200000, acc: 0, shpd: 30, rtk: 50000, subs: 15000 }, appData.plans || {});
+            appData.salarySettings = Object.assign({ basePay: 25000, daysWorked: 15, daysTotal: 30 }, appData.salarySettings || {});
+            appData.simSalesLog = Array.isArray(appData.simSalesLog) ? appData.simSalesLog : [];
+            appData.mnpList = Array.isArray(appData.mnpList) ? appData.mnpList : [];
+            appData.shpdList = Array.isArray(appData.shpdList) ? appData.shpdList : [];
+            appData.dailyMatrix = Object.assign({ sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} }, appData.dailyMatrix || {});
+            Object.keys({ sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} }).forEach(k => {
+                appData.dailyMatrix[k] = appData.dailyMatrix[k] && typeof appData.dailyMatrix[k] === 'object' ? appData.dailyMatrix[k] : {};
+            });
+            appData.notes = appData.notes || '';
+            appData.notesList = Array.isArray(appData.notesList) ? appData.notesList : [];
+            if (appData.notes && appData.notesList.length === 0) {
+                appData.notesList.push({ id: Date.now(), title: 'Старая заметка', text: appData.notes, images: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+            }
         }
 
-        async function loadData() {
+        function loadLocalData() {
             try {
-                if (telegramInitData) {
-                    const response = await fetch('/api/data', {
-                        headers: { 'X-Telegram-Init-Data': telegramInitData },
-                        cache: 'no-store'
-                    });
-                    if (!response.ok) throw new Error('Не удалось загрузить данные с сервера');
-                    const payload = await response.json();
-                    if (payload.data) appData = payload.data;
-                } else {
-                    const saved = localStorage.getItem('salon_app_data_v9');
-                    if (saved) appData = JSON.parse(saved);
-                }
-                normalizeAppData();
-            } catch (e) {
-                console.error('Error loading data', e);
                 const saved = localStorage.getItem('salon_app_data_v9');
-                if (saved) {
-                    try { appData = JSON.parse(saved); normalizeAppData(); } catch (_) {}
+                if (saved) appData = JSON.parse(saved);
+            } catch (e) { console.error('Error loading local data', e); }
+            normalizeAppData();
+        }
+
+        function saveLocalData() {
+            try { localStorage.setItem('salon_app_data_v9', JSON.stringify(appData)); }
+            catch (e) { console.error('Error saving local data', e); }
+        }
+
+        let cloudSyncReady = false;
+        let cloudSyncTimer = null;
+        let cloudUserId = null;
+
+        function telegramInitData() {
+            return window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp.initData : '';
+        }
+
+        async function apiRequest(url, options = {}) {
+            const initData = telegramInitData();
+            if (!initData) throw new Error('Приложение открыто не из Telegram');
+            const headers = Object.assign({}, options.headers || {}, {
+                'Content-Type': 'application/json',
+                'Authorization': 'tma ' + initData
+            });
+            const response = await fetch(url, Object.assign({}, options, { headers }));
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(result.error || ('HTTP ' + response.status));
+            return result;
+        }
+
+        async function initCloudSync() {
+            try {
+                const tg = window.Telegram && window.Telegram.WebApp;
+                if (!tg || !tg.initData) {
+                    console.warn('Telegram initData is unavailable; local mode');
+                    return;
                 }
+                tg.ready();
+                tg.expand();
+
+                const me = await apiRequest('/api/me');
+                cloudUserId = String(me.user?.id || '');
+                if (!cloudUserId) throw new Error('Сервер не вернул Telegram user ID');
+
+                const previousOwner = localStorage.getItem('salon_app_telegram_user_id');
+                if (previousOwner && previousOwner !== cloudUserId) {
+                    localStorage.removeItem('salon_app_data_v9');
+                    appData = {
+                        plans: { sim: 100, mnp: 0, gsm: 200000, acc: 0, shpd: 30, rtk: 50000, subs: 15000 },
+                        salarySettings: { basePay: 25000, daysWorked: 15, daysTotal: 30 },
+                        simSalesLog: [], mnpList: [], shpdList: [],
+                        dailyMatrix: { sim: {}, gsm: {}, acc: {}, shpd: {}, rtk: {}, subs: {} },
+                        notes: '', notesList: []
+                    };
+                }
+
+                const cloud = await apiRequest('/api/data');
+                if (cloud.exists && cloud.data) {
+                    appData = cloud.data;
+                    normalizeAppData();
+                    saveLocalData();
+                } else if (!previousOwner || previousOwner === cloudUserId) {
+                    await apiRequest('/api/data', { method: 'POST', body: JSON.stringify({ data: appData }) });
+                }
+
+                localStorage.setItem('salon_app_telegram_user_id', cloudUserId);
+                cloudSyncReady = true;
+                console.log('Telegram account verified; cloud sync enabled for user', cloudUserId);
+            } catch (e) {
+                console.error('Cloud sync initialization failed:', e);
             }
         }
 
         function saveData() {
-            try {
-                localStorage.setItem('salon_app_data_v9', JSON.stringify(appData));
-            } catch (e) {
-                console.error('Error saving local data', e);
-            }
-
-            if (!telegramInitData) return;
-            clearTimeout(cloudSaveTimer);
-            cloudSaveTimer = setTimeout(async () => {
-                if (cloudSaveInProgress) return;
-                cloudSaveInProgress = true;
+            saveLocalData();
+            if (!cloudSyncReady) return;
+            clearTimeout(cloudSyncTimer);
+            cloudSyncTimer = setTimeout(async () => {
                 try {
-                    const response = await fetch('/api/data', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Telegram-Init-Data': telegramInitData
-                        },
-                        body: JSON.stringify({ data: appData })
-                    });
-                    if (!response.ok) throw new Error('Не удалось сохранить данные');
-                } catch (e) {
-                    console.error('Error saving cloud data', e);
-                } finally {
-                    cloudSaveInProgress = false;
-                }
-            }, 250);
+                    await apiRequest('/api/data', { method: 'POST', body: JSON.stringify({ data: appData }) });
+                } catch (e) { console.error('Cloud save failed:', e); }
+            }, 350);
         }
 
         function switchTab(tabId) {
@@ -1900,11 +1927,9 @@ nav span{font-size:9px!important;margin-top:4px!important}
         }
 
         window.onload = async function() {
-            if (telegramApp) {
-                telegramApp.ready();
-                telegramApp.expand();
-            }
-            await loadData();
+            loadLocalData();
+            updateUI();
+            await initCloudSync();
             updateUI();
         };
     </script>
